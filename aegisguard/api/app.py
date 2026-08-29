@@ -7,6 +7,7 @@ Includes standalone HTTP server capability and optional FastAPI support.
 
 import json
 import sys
+from pathlib import Path
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
 from typing import Dict, Any, List
@@ -63,7 +64,33 @@ class AegisApiHandler(BaseHTTPRequestHandler):
         path = parsed.path
         params = parse_qs(parsed.query)
 
-        if path == "/api/v1/health":
+        static_dir = Path(__file__).resolve().parent.parent / "ui" / "static"
+
+        if path in ["/", "/dashboard", "/index.html"]:
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.end_headers()
+            with open(static_dir / "index.html", "rb") as f:
+                self.wfile.write(f.read())
+            return
+
+        elif path == "/styles.css":
+            self.send_response(200)
+            self.send_header("Content-Type", "text/css; charset=utf-8")
+            self.end_headers()
+            with open(static_dir / "styles.css", "rb") as f:
+                self.wfile.write(f.read())
+            return
+
+        elif path == "/app.js":
+            self.send_response(200)
+            self.send_header("Content-Type", "application/javascript; charset=utf-8")
+            self.end_headers()
+            with open(static_dir / "app.js", "rb") as f:
+                self.wfile.write(f.read())
+            return
+
+        elif path == "/api/v1/health":
             self._set_json_headers(200)
             self.wfile.write(json.dumps({"status": "HEALTHY", "code": 200}).encode("utf-8"))
 
