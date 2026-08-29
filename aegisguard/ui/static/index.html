@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AegisGuard | Enterprise Cyber Defense & SecOps Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen">
+    <!-- Header Navigation -->
+    <header class="border-b border-cyan-900/40 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20 font-mono font-bold text-white text-xl">
+                    AG
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                        AegisGuard <span class="text-xs px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-mono">ENTERPRISE v1.0</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">Unified SIEM, SOAR, CSPM & Threat Intelligence Operations</p>
+                </div>
+            </div>
+
+            <!-- Global Status Pills -->
+            <div class="flex items-center space-x-6 text-sm font-mono">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="text-slate-300 text-xs">DEFCON 4 (NORMAL)</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-slate-400 text-xs">API:</span>
+                    <span class="text-cyan-400 text-xs font-semibold">CONNECTED</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-slate-400 text-xs">INGESTION:</span>
+                    <span class="text-emerald-400 text-xs font-semibold">4.8k EPS</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main App Container -->
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        <!-- KPI Metric Ribbon -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5 shadow-xl hover:border-cyan-500/40 transition">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">MITRE Matrix Coverage</span>
+                    <span class="text-xs font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-400">14 Tactics</span>
+                </div>
+                <div class="text-3xl font-extrabold font-mono text-white mb-1">360</div>
+                <p class="text-xs text-slate-400">Validated Enterprise & Cloud techniques</p>
+            </div>
+
+            <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5 shadow-xl hover:border-red-500/40 transition">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">CVE Vulnerability DB</span>
+                    <span class="text-xs font-mono px-2 py-0.5 rounded bg-red-500/20 text-red-400">162 Critical</span>
+                </div>
+                <div class="text-3xl font-extrabold font-mono text-white mb-1">360</div>
+                <p class="text-xs text-slate-400">CVSS v3.1 mathematical scoring engine</p>
+            </div>
+
+            <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5 shadow-xl hover:border-purple-500/40 transition">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Detection Rules</span>
+                    <span class="text-xs font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-400">Sigma AST</span>
+                </div>
+                <div class="text-3xl font-extrabold font-mono text-white mb-1">240</div>
+                <p class="text-xs text-slate-400">Rules compiled across Windows/Linux/Cloud</p>
+            </div>
+
+            <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5 shadow-xl hover:border-amber-500/40 transition">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Threat Intelligence</span>
+                    <span class="text-xs font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-400">STIX 2.1</span>
+                </div>
+                <div class="text-3xl font-extrabold font-mono text-white mb-1">613</div>
+                <p class="text-xs text-slate-400">Active adversary IOCs & APT actor dossiers</p>
+            </div>
+        </div>
+
+        <!-- Tabbed SecOps Operations Center -->
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl overflow-hidden shadow-2xl">
+            <div class="border-b border-slate-800 px-6 flex space-x-8 bg-slate-950/40 font-mono text-sm">
+                <button onclick="switchTab('triage')" id="tab-triage" class="py-4 border-b-2 border-cyan-500 text-cyan-400 font-semibold focus:outline-none">LIVE SOC TRIAGE</button>
+                <button onclick="switchTab('mitre')" id="tab-mitre" class="py-4 border-b-2 border-transparent text-slate-400 hover:text-slate-200 focus:outline-none">MITRE MATRIX</button>
+                <button onclick="switchTab('cve')" id="tab-cve" class="py-4 border-b-2 border-transparent text-slate-400 hover:text-slate-200 focus:outline-none">CVE EXPLORER</button>
+                <button onclick="switchTab('compliance')" id="tab-compliance" class="py-4 border-b-2 border-transparent text-slate-400 hover:text-slate-200 focus:outline-none">COMPLIANCE RADAR</button>
+                <button onclick="switchTab('soar')" id="tab-soar" class="py-4 border-b-2 border-transparent text-slate-400 hover:text-slate-200 focus:outline-none">SOAR PLAYBOOKS</button>
+            </div>
+
+            <div class="p-6">
+                <!-- Tab 1: Live SOC Triage -->
+                <div id="view-triage">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-lg font-bold text-white">Live Real-Time Telemetry Stream</h2>
+                            <p class="text-xs text-slate-400">Ingested events evaluated against Sigma detection rules and stateful correlation</p>
+                        </div>
+                        <div class="flex gap-3">
+                            <button onclick="simulateAttackEvent()" class="px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white rounded-lg text-xs font-mono font-semibold shadow-lg shadow-red-600/20 transition">SIMULATE ATTACK</button>
+                            <button onclick="simulateSyslogBatch()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-mono transition">INGEST BATCH</button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left font-mono text-xs border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-800 text-slate-400 bg-slate-950/60">
+                                    <th class="py-3 px-4">TIMESTAMP</th>
+                                    <th class="py-3 px-4">SEVERITY</th>
+                                    <th class="py-3 px-4">ALERT TITLE</th>
+                                    <th class="py-3 px-4">SOURCE IP</th>
+                                    <th class="py-3 px-4">RULE ID</th>
+                                    <th class="py-3 px-4">STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="alerts-table-body" class="divide-y divide-slate-800/60">
+                                <!-- Populated dynamically by app.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tab 2: MITRE Matrix -->
+                <div id="view-mitre" class="hidden">
+                    <h2 class="text-lg font-bold text-white mb-2">MITRE ATT&CK Enterprise Matrix Navigator</h2>
+                    <p class="text-xs text-slate-400 mb-6">Interactive coverage map spanning all 14 tactics</p>
+                    <div id="mitre-matrix-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+                        <!-- Populated by app.js -->
+                    </div>
+                </div>
+
+                <!-- Tab 3: CVE Explorer -->
+                <div id="view-cve" class="hidden">
+                    <div class="flex gap-4 mb-6">
+                        <input id="cve-search-input" type="text" placeholder="Search CVE-ID, CWE, or software component (e.g. Log4j, Kubernetes, OpenSSL)..." class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-cyan-500 font-mono">
+                        <button onclick="performCveSearch()" class="px-6 py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg text-xs font-mono font-semibold">SEARCH CVE</button>
+                    </div>
+                    <div id="cve-results-list" class="space-y-3">
+                        <!-- Populated by app.js -->
+                    </div>
+                </div>
+
+                <!-- Tab 4: Compliance Radar -->
+                <div id="view-compliance" class="hidden">
+                    <h2 class="text-lg font-bold text-white mb-2">Continuous Compliance & Audit Posture</h2>
+                    <p class="text-xs text-slate-400 mb-6">Automated evaluation against NIST SP 800-53 Rev 5 and CIS Benchmarks</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-slate-950/60 border border-slate-800 p-5 rounded-xl">
+                            <h3 class="text-sm font-bold text-white mb-3">NIST SP 800-53 Rev 5 (Moderate Baseline)</h3>
+                            <div class="w-full bg-slate-800 rounded-full h-3 mb-2">
+                                <div class="bg-cyan-500 h-3 rounded-full" style="width: 88%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs font-mono text-slate-400 mb-4">
+                                <span>Passing: 148 / 168 Controls</span>
+                                <span class="text-cyan-400 font-bold">88.1% Compliance</span>
+                            </div>
+                            <p class="text-xs text-slate-400">Audits cover Access Control (AC), System Monitoring (SI-4), Audit Logging (AU-2), and Boundary Protection (SC-7).</p>
+                        </div>
+
+                        <div class="bg-slate-950/60 border border-slate-800 p-5 rounded-xl">
+                            <h3 class="text-sm font-bold text-white mb-3">CIS Ubuntu & Cloud Foundations</h3>
+                            <div class="w-full bg-slate-800 rounded-full h-3 mb-2">
+                                <div class="bg-emerald-500 h-3 rounded-full" style="width: 92%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs font-mono text-slate-400 mb-4">
+                                <span>Passing: 128 / 139 Recommendations</span>
+                                <span class="text-emerald-400 font-bold">92.0% Compliance</span>
+                            </div>
+                            <p class="text-xs text-slate-400">Hardening enforced for SSH protocol 2, UFW firewall, S3 bucket public access blocks, and root MFA.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 5: SOAR Playbooks -->
+                <div id="view-soar" class="hidden">
+                    <h2 class="text-lg font-bold text-white mb-2">Automated Incident Containment Playbooks</h2>
+                    <p class="text-xs text-slate-400 mb-6">Deploy deterministic response workflows with sub-second execution latency</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-slate-950/60 border border-slate-800 p-5 rounded-xl flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-sm font-bold text-white mb-1">Host Quarantine Isolation</h3>
+                                <p class="text-xs text-slate-400 mb-4">Isolates compromised host network adapter, flushes sessions, reassigns VLAN to sandbox.</p>
+                            </div>
+                            <button onclick="triggerPlaybook('ISOLATE_HOST', 'srv-app-prod-02')" class="w-full py-2 bg-red-600/20 border border-red-500/40 text-red-400 hover:bg-red-600/30 rounded-lg text-xs font-mono font-semibold">EXECUTE PLAYBOOK</button>
+                        </div>
+
+                        <div class="bg-slate-950/60 border border-slate-800 p-5 rounded-xl flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-sm font-bold text-white mb-1">Perimeter Firewall Drop</h3>
+                                <p class="text-xs text-slate-400 mb-4">Injects immediate border ACL drop rule for adversary C2 IP and clears active connection states.</p>
+                            </div>
+                            <button onclick="triggerPlaybook('BLOCK_FIREWALL', '198.51.100.42')" class="w-full py-2 bg-amber-600/20 border border-amber-500/40 text-amber-400 hover:bg-amber-600/30 rounded-lg text-xs font-mono font-semibold">EXECUTE PLAYBOOK</button>
+                        </div>
+
+                        <div class="bg-slate-950/60 border border-slate-800 p-5 rounded-xl flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-sm font-bold text-white mb-1">Revoke Cloud IAM Credentials</h3>
+                                <p class="text-xs text-slate-400 mb-4">Attaches explicit DenyAll policy, deactivates API access keys, and invalidates STS sessions.</p>
+                            </div>
+                            <button onclick="triggerPlaybook('REVOKE_IAM', 'arn:aws:iam::123456789012:user/compromised_dev')" class="w-full py-2 bg-cyan-600/20 border border-cyan-500/40 text-cyan-400 hover:bg-cyan-600/30 rounded-lg text-xs font-mono font-semibold">EXECUTE PLAYBOOK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-slate-800/80 py-6 text-center text-xs text-slate-500 font-mono">
+        AegisGuard Enterprise Cyber Defense Platform &bull; Proprietary SOC Architecture &bull; 2026
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
