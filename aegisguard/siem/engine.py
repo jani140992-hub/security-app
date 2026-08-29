@@ -1,7 +1,8 @@
 """
 Real-Time Event Stream Correlation & Behavioral Detection Engine.
 Applies stateful sliding time windows to detect rapid authentication failure bursts,
-mass file alteration spikes, lateral movement pivoting, and rhythmic periodic beaconing.
+mass file alteration spikes, lateral movement pivoting, rhythmic periodic beaconing,
+and high-volume external data exfiltration anomalies.
 """
 
 import time
@@ -22,6 +23,7 @@ class CorrelationEngine:
         self.failed_logins: Dict[Tuple[str, str], List[float]] = defaultdict(list)
         self.file_modifications: Dict[str, List[float]] = defaultdict(list)
         self.outbound_connections: Dict[Tuple[str, str], List[float]] = defaultdict(list)
+        self.outbound_bandwidth_bytes: Dict[Tuple[str, str], int] = defaultdict(int)
         self.generated_alerts: List[SecurityAlert] = []
 
     def clean_old_entries(self, current_time: float):
@@ -177,6 +179,28 @@ class CorrelationEngine:
                         destination_ip=event.destination_ip
                     ))
                     self.outbound_connections[flow_key] = []
+
+        # 6. Behavioral Heuristic 4: Data Exfiltration Volume Spike (> 50MB outbound)
+        bytes_out = event.metadata.get("bytes_out", 0)
+        if bytes_out and event.source_ip and event.destination_ip:
+            flow_key = (event.source_ip, event.destination_ip)
+            self.outbound_bandwidth_bytes[flow_key] += bytes_out
+            if self.outbound_bandwidth_bytes[flow_key] > (50 * 1024 * 1024):
+                mb_transferred = round(self.outbound_bandwidth_bytes[flow_key] / (1024 * 1024), 2)
+                alerts.append(SecurityAlert(
+                    alert_id=f"alert-exfil-{uuid.uuid4()}",
+                    title=f"Anomalous High-Volume Data Exfiltration: {mb_transferred} MB transferred",
+                    description=f"Host {flow_key[0]} transmitted {mb_transferred} MB to external target {flow_key[1]} within monitoring window.",
+                    severity=EventSeverity.CRITICAL,
+                    rule_id="AEGIS-CORR-004",
+                    rule_source="CorrelationEngine",
+                    mitre_tactics=["TA0010"],
+                    mitre_techniques=["T1048"],
+                    source_event_ids=[event.event_id],
+                    source_ip=event.source_ip,
+                    destination_ip=event.destination_ip
+                ))
+                self.outbound_bandwidth_bytes[flow_key] = 0
 
         self.generated_alerts.extend(alerts)
         return alerts
