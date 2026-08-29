@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  aegisguard-soc:
+    build: .
+    container_name: aegisguard-soc
+    ports:
+      - "8443:8443"
+    environment:
+      - AEGIS_ENV=production
+      - AEGIS_PORT=8443
+      - AEGIS_LOG_LEVEL=INFO
+    restart: unless-stopped

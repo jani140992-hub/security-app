@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aegisguard"
+version = "1.0.0"
+description = "Enterprise Cyber Defense, SIEM Correlation & Threat Intelligence Platform"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "jani140992-hub", email = "jani140992-hub@users.noreply.github.com" }
+]
+
+[project.scripts]
+aegis = "aegisguard.cli.main:main"
