@@ -8,31 +8,158 @@
 [![CIS Benchmarks](https://img.shields.io/badge/CIS-Benchmarks%20v3.0-purple.svg)](https://www.cisecurity.org/cis-benchmarks)
 [![LOC](https://img.shields.io/badge/lines%20of%20code-50k+-brightgreen.svg)](https://github.com/jani140992-hub/security-app)
 
-AegisGuard is an enterprise-grade cyber defense and SecOps operations platform unifying SIEM log normalization, SOAR automated incident response playbooks, Cloud Security Posture Management (CSPM), OWASP Top 10 verification, Zero-Trust PKI, and high-fidelity STIX 2.1 Threat Intelligence.
+**AegisGuard** is an enterprise-grade cyber defense and SecOps operations platform unifying **SIEM log normalization & correlation**, **SOAR automated incident response playbooks**, **Cloud Security Posture Management (CSPM)**, **OWASP Top 10 verification**, **Zero-Trust PKI**, and high-fidelity **STIX 2.1 Threat Intelligence**.
 
-Designed for Fortune 500 security operations centers (SOC), managed detection and response (MDR) providers, and DevSecOps engineering teams, AegisGuard bridges the gap between static compliance mandates and active dynamic adversarial threat containment.
+---
 
-## Architecture & Subsystems
-- SIEM Multi-format log normalization (Syslog RFC 3164/5424, EVTX, CloudTrail, Suricata, Nginx)
-- Real-time stream correlation engine with sliding time windows
-- 14 MITRE ATT&CK Tactics & 360 Techniques
-- 360+ CVE advisories with native FIRST CVSS v3.1 mathematical scoring engine
-- NIST SP 800-53 Rev 5 (168 controls across 19 families)
-- CIS Benchmarks (139 recommendations across 5 benchmark profiles)
-- 240 Sigma detection rules compiled across Windows, Linux, and Cloud
-- 613 STIX 2.1 IOCs tracked across 10 major threat actors
-- 379 Suricata network intrusion detection signatures
-- Automated SOAR containment playbooks (Host isolation, firewall block, IAM credential revocation)
-- Zero-Trust Cryptography & internal PKI Certificate Authority
+## Dependencies
 
-## Quickstart
+AegisGuard requires the following foundational environments and packages:
+
+- **Runtime Environment**: Python >= 3.10, Node.js >= 18 (for dashboard asset tooling)
+- **Containerization**: Docker >= 24.0, Docker Compose >= 2.20
+- **Python Libraries**:
+  - `fastapi >= 0.104.0`: Asynchronous REST API framework
+  - `uvicorn >= 0.24.0`: Lightning-fast ASGI production server
+  - `pydantic >= 2.5.0`: Data schema validation and typing
+  - `cryptography >= 41.0.0`: Low-level cryptographic primitives
+  - `requests >= 2.31.0`: Synchronous HTTP client for external threat feed ingestion
+
+---
+
+## Installation
+
+Clone the repository and prepare the virtual environment:
+
 ```bash
-# Run CLI overview
-python -m aegisguard.cli.main overview
+# 1. Clone the repository
+git clone git@github.com:jani140992-hub/security-app.git
+cd security-app
 
-# Run automated tests
-python -m unittest discover -s tests -p "test_*.py" -v
+# 2. Create and activate isolated Python virtual environment
+python -m venv venv
 
-# Launch REST API server
+# On Linux / macOS:
+source venv/bin/activate
+
+# On Windows PowerShell:
+.\venv\Scripts\Activate.ps1
+
+# 3. Install required production dependencies
+pip install -r requirements.txt
+
+# 4. Install AegisGuard package in editable mode
+pip install -e .
+```
+
+---
+
+## Build
+
+### Container Image Build
+Build the containerized production image:
+
+```bash
+docker build -t aegisguard:latest .
+```
+
+### Python Package Distribution Build
+To build wheel and source distributions:
+
+```bash
+pip install build
+python -m build
+```
+
+---
+
+## Run
+
+### Run Local CLI Operations
+Once installed, the `aegis` command-line utility is available globally:
+
+```bash
+# Display enterprise platform telemetry overview
+aegis overview
+
+# Ingest and scan raw syslog event
+aegis scan-log --type syslog --log "<34>Oct 11 22:14:15 srv01 sshd[1234]: Failed password for invalid user root from 198.51.100.42 port 50232 ssh2"
+
+# Query the vulnerability database
+aegis check-cve Log4j
+
+# Query threat intelligence feeds
+aegis threat-lookup 198.51.100.42
+
+# Perform continuous compliance audit against NIST SP 800-53
+aegis audit-compliance --framework NIST-800-53 --baseline MODERATE
+```
+
+### Run REST API Server
+Start the standalone AegisGuard HTTP/REST API service on port 8443:
+
+```bash
 python -m aegisguard.api.app 8443
 ```
+
+### Run with Docker Compose
+To launch the complete SecOps stack in the background:
+
+```bash
+docker-compose up -d
+```
+
+### Run Automated Tests
+Run the complete unit and integration test suite:
+
+```bash
+python -m unittest discover -s tests -p "test_*.py" -v
+```
+
+---
+
+## Usage
+
+### 1. Unified SIEM Ingestion & Correlation
+AegisGuard ingests multiple log formats and converts them to OCSF schemas:
+```python
+from aegisguard.siem.parser import LogParser
+from aegisguard.siem.engine import CorrelationEngine
+
+# Parse Syslog
+evt = LogParser.parse_syslog("<34>Oct 11 22:14:15 srv01 sshd[1234]: Failed password for invalid user root from 198.51.100.42 port 50232 ssh2")
+
+# Correlate
+engine = CorrelationEngine()
+alerts = engine.process_event(evt)
+for alert in alerts:
+    print(f"[{alert.severity.value}] {alert.title} ({alert.rule_id})")
+```
+
+### 2. SOAR Automated Containment Playbooks
+Trigger immediate automated response actions:
+```python
+from aegisguard.soar.playbooks import SoarPlaybookEngine
+
+# Quarantine host
+record = SoarPlaybookEngine.execute_host_isolation_playbook("10.0.10.25", "srv-finance-01", "alert-101")
+print(f"Playbook {record.playbook_name}: {record.status.value}")
+```
+
+### 3. Threat Intelligence IOC Lookup & STIX 2.1 Export
+Query IOC database or export STIX bundles:
+```python
+from aegisguard.catalogs.stix_threat_intel import ThreatIntelligenceEngine
+
+ioc = ThreatIntelligenceEngine.lookup_ioc("198.51.100.42")
+print(f"IOC Hit: {ioc.value} | Actor: {ioc.associated_actor} | Confidence: {ioc.confidence}%")
+
+bundle = ThreatIntelligenceEngine.export_stix_bundle()
+print(f"Exported STIX Bundle with {len(bundle['objects'])} objects")
+```
+
+---
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
